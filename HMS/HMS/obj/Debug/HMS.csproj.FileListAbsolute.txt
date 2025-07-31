@@ -1,0 +1,10 @@
+D:\projects\esoft\hostel\hostel-ms-desktop\HMS\HMS\obj\Debug\HMS.csproj.AssemblyReference.cache
+D:\projects\esoft\hostel\hostel-ms-desktop\HMS\HMS\obj\Debug\HMS.Properties.Resources.resources
+D:\projects\esoft\hostel\hostel-ms-desktop\HMS\HMS\obj\Debug\HMS.csproj.GenerateResource.cache
+D:\projects\esoft\hostel\hostel-ms-desktop\HMS\HMS\obj\Debug\HMS.csproj.CoreCompileInputs.cache
+D:\projects\esoft\hostel\hostel-ms-desktop\HMS\HMS\bin\Debug\HMS.exe.config
+D:\projects\esoft\hostel\hostel-ms-desktop\HMS\HMS\bin\Debug\HMS.exe
+D:\projects\esoft\hostel\hostel-ms-desktop\HMS\HMS\bin\Debug\HMS.pdb
+D:\projects\esoft\hostel\hostel-ms-desktop\HMS\HMS\obj\Debug\HMS.exe
+D:\projects\esoft\hostel\hostel-ms-desktop\HMS\HMS\obj\Debug\HMS.pdb
+D:\projects\esoft\hostel\hostel-ms-desktop\HMS\HMS\obj\Debug\HMS.exe.config
