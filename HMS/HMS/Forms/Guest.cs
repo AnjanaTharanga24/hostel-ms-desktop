@@ -2,6 +2,9 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.Data;
+using System.Linq;
+using HMS.Data;
+using HMS.Models;
 
 namespace HMS.Forms
 {
@@ -25,9 +28,12 @@ namespace HMS.Forms
         private Button gstsearch;
         private DataGridView gstsearchbar;
 
+        private GuestRepository _guestRepository;
+
         public Guest(Dashboard dashboard)
         {
             parentDashboard = dashboard;
+            _guestRepository = new GuestRepository();
             InitializeComponents();
         }
 
@@ -37,7 +43,8 @@ namespace HMS.Forms
             this.AutoScaleMode = AutoScaleMode.None;
             this.BackgroundImage = Properties.Resources.img1; // Make sure you have img1 in resources
             this.ClientSize = new Size(1350, 624);
-            this.Text = "Guest_Info";
+            this.Text = "Guest Information - HMS";
+            this.Load += Guest_Load;
 
             // gsttitle Label
             gsttitle = new Label();
@@ -63,7 +70,7 @@ namespace HMS.Forms
             label4.Text = "Room No.";
             this.Controls.Add(label4);
 
-            // gstnumbtn TextBox
+            // gstnumbtn TextBox (Phone Number)
             gstnumbtn = new TextBox();
             gstnumbtn.Location = new Point(436, 285);
             gstnumbtn.Size = new Size(274, 26);
@@ -80,6 +87,7 @@ namespace HMS.Forms
             gstmodify.TabIndex = 26;
             gstmodify.Text = "Modify";
             gstmodify.UseVisualStyleBackColor = false;
+            gstmodify.Click += gstmodify_Click;
             this.Controls.Add(gstmodify);
 
             // gstdelete Button
@@ -92,6 +100,7 @@ namespace HMS.Forms
             gstdelete.TabIndex = 25;
             gstdelete.Text = "Delete";
             gstdelete.UseVisualStyleBackColor = false;
+            gstdelete.Click += gstdelete_Click;
             this.Controls.Add(gstdelete);
 
             // gstinsert Button
@@ -104,7 +113,7 @@ namespace HMS.Forms
             gstinsert.TabIndex = 24;
             gstinsert.Text = "Insert";
             gstinsert.UseVisualStyleBackColor = false;
-            gstinsert.Click += button1_Click;
+            gstinsert.Click += gstinsert_Click;
             this.Controls.Add(gstinsert);
 
             // gstnamebtn TextBox
@@ -114,11 +123,13 @@ namespace HMS.Forms
             gstnamebtn.TabIndex = 22;
             this.Controls.Add(gstnamebtn);
 
-            // gstidbtn TextBox
+            // gstidbtn TextBox (Guest ID)
             gstidbtn = new TextBox();
             gstidbtn.Location = new Point(436, 129);
             gstidbtn.Size = new Size(274, 26);
             gstidbtn.TabIndex = 21;
+            gstidbtn.ReadOnly = true;
+            gstidbtn.BackColor = Color.LightGray;
             this.Controls.Add(gstidbtn);
 
             // gstnum Label
@@ -191,6 +202,7 @@ namespace HMS.Forms
             gstsearch.TabIndex = 34;
             gstsearch.Text = "Search";
             gstsearch.UseVisualStyleBackColor = true;
+            gstsearch.Click += gstsearch_Click;
             this.Controls.Add(gstsearch);
 
             // gstsearchbar DataGridView
@@ -201,12 +213,293 @@ namespace HMS.Forms
             gstsearchbar.Size = new Size(605, 150);
             gstsearchbar.TabIndex = 35;
             gstsearchbar.CellContentClick += gstsearchbar_CellContentClick;
+            gstsearchbar.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            gstsearchbar.MultiSelect = false;
+            gstsearchbar.ReadOnly = true;
             this.Controls.Add(gstsearchbar);
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void Guest_Load(object sender, EventArgs e)
         {
-            // Insert button click handler
+            try
+            {
+                // Test database connection
+                if (!_guestRepository.TestConnection())
+                {
+                    MessageBox.Show("Unable to connect to database. Please check your connection settings.",
+                        "Database Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Load all guests
+                LoadAllGuests();
+
+                // Clear form fields
+                ClearFormFields();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading form: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void LoadAllGuests()
+        {
+            try
+            {
+                var guests = _guestRepository.GetAllGuests();
+
+                var displayData = guests.Select(g => new
+                {
+                    GuestID = g.GuestID,
+                    GuestName = g.GuestName,
+                    PhoneNo = g.PhoneNo,
+                    RoomNo = g.RoomNo,
+                    CreatedDate = g.CreatedDate
+                }).ToList();
+
+                gstsearchbar.DataSource = displayData;
+
+                // Format columns
+                if (gstsearchbar.Columns.Count > 0)
+                {
+                    gstsearchbar.Columns["GuestID"].HeaderText = "Guest ID";
+                    gstsearchbar.Columns["GuestName"].HeaderText = "Guest Name";
+                    gstsearchbar.Columns["PhoneNo"].HeaderText = "Phone No.";
+                    gstsearchbar.Columns["RoomNo"].HeaderText = "Room No.";
+                    gstsearchbar.Columns["CreatedDate"].HeaderText = "Created Date";
+
+                    gstsearchbar.Columns["CreatedDate"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+
+                    // Auto-resize columns
+                    gstsearchbar.AutoResizeColumns();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading guests: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void gstinsert_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Validate input
+                if (string.IsNullOrWhiteSpace(gstnamebtn.Text))
+                {
+                    MessageBox.Show("Please enter guest name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    gstnamebtn.Focus();
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(gstnumbtn.Text))
+                {
+                    MessageBox.Show("Please enter phone number.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    gstnumbtn.Focus();
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(gstroombtn.Text))
+                {
+                    MessageBox.Show("Please enter room number.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    gstroombtn.Focus();
+                    return;
+                }
+
+                // Check if room is available
+                if (!_guestRepository.IsRoomAvailable(gstroombtn.Text.Trim()))
+                {
+                    MessageBox.Show("This room is already occupied by another guest.", "Room Not Available",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    gstroombtn.Focus();
+                    return;
+                }
+
+                // Validate phone number format (basic validation)
+                if (!IsValidPhoneNumber(gstnumbtn.Text.Trim()))
+                {
+                    MessageBox.Show("Please enter a valid phone number.", "Validation Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    gstnumbtn.Focus();
+                    return;
+                }
+
+                // Create new guest
+                var guest = new HMS.Models.Guest
+                {
+                    GuestName = gstnamebtn.Text.Trim(),
+                    PhoneNo = gstnumbtn.Text.Trim(),
+                    RoomNo = gstroombtn.Text.Trim(),
+                    CreatedDate = DateTime.Now
+                };
+
+                if (_guestRepository.InsertGuest(guest))
+                {
+                    MessageBox.Show("Guest added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadAllGuests();
+                    ClearFormFields();
+                }
+                else
+                {
+                    MessageBox.Show("Failed to add guest. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error adding guest: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void gstdelete_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (gstsearchbar.SelectedRows.Count == 0)
+                {
+                    MessageBox.Show("Please select a guest to delete.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                var result = MessageBox.Show("Are you sure you want to delete this guest?", "Confirm Delete",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    int guestId = Convert.ToInt32(gstsearchbar.SelectedRows[0].Cells["GuestID"].Value);
+
+                    if (_guestRepository.DeleteGuest(guestId))
+                    {
+                        MessageBox.Show("Guest deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        LoadAllGuests();
+                        ClearFormFields();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to delete guest. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error deleting guest: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void gstmodify_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Check if a guest is selected
+                if (gstsearchbar.SelectedRows.Count == 0)
+                {
+                    MessageBox.Show("Please select a guest to modify.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Validate input
+                if (string.IsNullOrWhiteSpace(gstnamebtn.Text))
+                {
+                    MessageBox.Show("Please enter guest name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    gstnamebtn.Focus();
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(gstnumbtn.Text))
+                {
+                    MessageBox.Show("Please enter phone number.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    gstnumbtn.Focus();
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(gstroombtn.Text))
+                {
+                    MessageBox.Show("Please enter room number.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    gstroombtn.Focus();
+                    return;
+                }
+
+                int guestId = Convert.ToInt32(gstsearchbar.SelectedRows[0].Cells["GuestID"].Value);
+
+                // Check if room is available (excluding current guest)
+                if (!_guestRepository.IsRoomAvailable(gstroombtn.Text.Trim(), guestId))
+                {
+                    MessageBox.Show("This room is already occupied by another guest.", "Room Not Available",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    gstroombtn.Focus();
+                    return;
+                }
+
+                // Validate phone number format
+                if (!IsValidPhoneNumber(gstnumbtn.Text.Trim()))
+                {
+                    MessageBox.Show("Please enter a valid phone number.", "Validation Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    gstnumbtn.Focus();
+                    return;
+                }
+
+                // Create updated guest
+                var guest = new HMS.Models.Guest
+                {
+                    GuestID = guestId,
+                    GuestName = gstnamebtn.Text.Trim(),
+                    PhoneNo = gstnumbtn.Text.Trim(),
+                    RoomNo = gstroombtn.Text.Trim()
+                };
+
+                if (_guestRepository.UpdateGuest(guest))
+                {
+                    MessageBox.Show("Guest updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadAllGuests();
+                    ClearFormFields();
+                }
+                else
+                {
+                    MessageBox.Show("Failed to update guest. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating guest: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void gstsearch_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string searchTerm = searchbar.Text.Trim();
+
+                if (string.IsNullOrEmpty(searchTerm))
+                {
+                    LoadAllGuests(); // Show all if search is empty
+                    return;
+                }
+
+                var guests = _guestRepository.SearchGuests(searchTerm);
+
+                var displayData = guests.Select(g => new
+                {
+                    GuestID = g.GuestID,
+                    GuestName = g.GuestName,
+                    PhoneNo = g.PhoneNo,
+                    RoomNo = g.RoomNo,
+                    CreatedDate = g.CreatedDate
+                }).ToList();
+
+                gstsearchbar.DataSource = displayData;
+
+                if (guests.Count == 0)
+                {
+                    MessageBox.Show($"No guests found with search term '{searchTerm}'.", "Search Results",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error searching guests: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void gstback_Click(object sender, EventArgs e)
@@ -218,7 +511,43 @@ namespace HMS.Forms
 
         private void gstsearchbar_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            // DataGridView cell click handler
+            try
+            {
+                if (e.RowIndex >= 0 && gstsearchbar.SelectedRows.Count > 0)
+                {
+                    var row = gstsearchbar.SelectedRows[0];
+
+                    gstidbtn.Text = row.Cells["GuestID"].Value.ToString();
+                    gstnamebtn.Text = row.Cells["GuestName"].Value.ToString();
+                    gstnumbtn.Text = row.Cells["PhoneNo"].Value.ToString();
+                    gstroombtn.Text = row.Cells["RoomNo"].Value.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error selecting guest: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ClearFormFields()
+        {
+            gstidbtn.Clear();
+            gstnamebtn.Clear();
+            gstnumbtn.Clear();
+            gstroombtn.Clear();
+        }
+
+        private bool IsValidPhoneNumber(string phoneNumber)
+        {
+            // Basic phone number validation - you can make this more sophisticated
+            if (string.IsNullOrWhiteSpace(phoneNumber))
+                return false;
+
+            // Remove common phone number characters
+            string cleanNumber = phoneNumber.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("+", "");
+
+            // Check if it contains only digits and has reasonable length
+            return cleanNumber.All(char.IsDigit) && cleanNumber.Length >= 7 && cleanNumber.Length <= 15;
         }
     }
 }

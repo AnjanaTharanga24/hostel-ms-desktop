@@ -2,6 +2,9 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.Data;
+using System.Linq;
+using HMS.Data;
+using HMS.Models;
 
 namespace HMS.Forms
 {
@@ -25,20 +28,23 @@ namespace HMS.Forms
         private TextBox staffserachbar;
         private DataGridView dataGridView1;
 
+        private StaffRepository _staffRepository;
+
         public Staff(Dashboard dashboard)
         {
             parentDashboard = dashboard;
+            _staffRepository = new StaffRepository();
             InitializeComponents();
         }
 
         private void InitializeComponents()
         {
             // Main Form setup
-            this.AutoScaleDimensions = new SizeF(9F, 20F);
-            this.AutoScaleMode = AutoScaleMode.Font;
-            this.BackgroundImage = Properties.Resources.img1; // Make sure you have img1 in resources
+            this.AutoScaleMode = AutoScaleMode.None;
+            this.BackgroundImage = Properties.Resources.img1;
             this.ClientSize = new Size(1358, 639);
-            this.Text = "Staff_Info";
+            this.Text = "Staff Information - HMS";
+            this.Load += Staff_Load;
 
             // stfback Button
             stfback = new Button();
@@ -101,6 +107,7 @@ namespace HMS.Forms
             stfmodify.TabIndex = 40;
             stfmodify.Text = "Modify";
             stfmodify.UseVisualStyleBackColor = false;
+            stfmodify.Click += stfmodify_Click;
             this.Controls.Add(stfmodify);
 
             // stfdelete Button
@@ -113,6 +120,7 @@ namespace HMS.Forms
             stfdelete.TabIndex = 39;
             stfdelete.Text = "Delete";
             stfdelete.UseVisualStyleBackColor = false;
+            stfdelete.Click += stfdelete_Click;
             this.Controls.Add(stfdelete);
 
             // stfinsert Button
@@ -125,7 +133,7 @@ namespace HMS.Forms
             stfinsert.TabIndex = 38;
             stfinsert.Text = "Insert";
             stfinsert.UseVisualStyleBackColor = false;
-            stfinsert.Click += button1_Click;
+            stfinsert.Click += stfinsert_Click;
             this.Controls.Add(stfinsert);
 
             // stfnamebtn TextBox
@@ -140,6 +148,8 @@ namespace HMS.Forms
             stfidbtn.Location = new Point(442, 133);
             stfidbtn.Size = new Size(274, 26);
             stfidbtn.TabIndex = 36;
+            stfidbtn.ReadOnly = true;
+            stfidbtn.BackColor = Color.LightGray;
             this.Controls.Add(stfidbtn);
 
             // staffnum Label
@@ -185,6 +195,7 @@ namespace HMS.Forms
             staffsearch.TabIndex = 48;
             staffsearch.Text = "Search";
             staffsearch.UseVisualStyleBackColor = true;
+            staffsearch.Click += staffsearch_Click;
             this.Controls.Add(staffsearch);
 
             // staffserachbar TextBox
@@ -201,24 +212,341 @@ namespace HMS.Forms
             dataGridView1.Size = new Size(550, 150);
             dataGridView1.TabIndex = 49;
             dataGridView1.CellContentClick += dataGridView1_CellContentClick;
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.MultiSelect = false;
+            dataGridView1.ReadOnly = true;
             this.Controls.Add(dataGridView1);
+        }
+
+        private void Staff_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                // Test database connection
+                if (!_staffRepository.TestConnection())
+                {
+                    MessageBox.Show("Unable to connect to database. Please check your connection settings.",
+                        "Database Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Load all staff
+                LoadAllStaff();
+
+                // Clear form fields
+                ClearFormFields();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading form: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void LoadAllStaff()
+        {
+            try
+            {
+                var staffList = _staffRepository.GetAllStaff();
+
+                var displayData = staffList.Select(s => new
+                {
+                    StaffID = s.StaffID,
+                    StaffName = s.StaffName,
+                    PhoneNo = s.PhoneNo,
+                    Address = s.Address,
+                    CreatedDate = s.CreatedDate
+                }).ToList();
+
+                dataGridView1.DataSource = displayData;
+
+                // Format columns
+                if (dataGridView1.Columns.Count > 0)
+                {
+                    dataGridView1.Columns["StaffID"].HeaderText = "Staff ID";
+                    dataGridView1.Columns["StaffName"].HeaderText = "Staff Name";
+                    dataGridView1.Columns["PhoneNo"].HeaderText = "Phone No.";
+                    dataGridView1.Columns["Address"].HeaderText = "Address";
+                    dataGridView1.Columns["CreatedDate"].HeaderText = "Created Date";
+
+                    dataGridView1.Columns["CreatedDate"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+
+                    // Auto-resize columns
+                    dataGridView1.AutoResizeColumns();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading staff: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void stfinsert_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Validate input
+                if (string.IsNullOrWhiteSpace(stfnamebtn.Text))
+                {
+                    MessageBox.Show("Please enter staff name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    stfnamebtn.Focus();
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(stfphonebtn.Text))
+                {
+                    MessageBox.Show("Please enter phone number.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    stfphonebtn.Focus();
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(stfaddressbtn.Text))
+                {
+                    MessageBox.Show("Please enter address.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    stfaddressbtn.Focus();
+                    return;
+                }
+
+                // Validate phone number format
+                if (!IsValidPhoneNumber(stfphonebtn.Text.Trim()))
+                {
+                    MessageBox.Show("Please enter a valid phone number.", "Validation Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    stfphonebtn.Focus();
+                    return;
+                }
+
+                // Check if phone number already exists
+                if (_staffRepository.IsPhoneNumberExists(stfphonebtn.Text.Trim()))
+                {
+                    MessageBox.Show("This phone number is already registered to another staff member.", "Duplicate Phone Number",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    stfphonebtn.Focus();
+                    return;
+                }
+
+                // Create new staff
+                var staff = new HMS.Models.Staff
+                {
+                    StaffName = stfnamebtn.Text.Trim(),
+                    PhoneNo = stfphonebtn.Text.Trim(),
+                    Address = stfaddressbtn.Text.Trim(),
+                    CreatedDate = DateTime.Now
+                };
+
+                if (_staffRepository.InsertStaff(staff))
+                {
+                    MessageBox.Show("Staff added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadAllStaff();
+                    ClearFormFields();
+                }
+                else
+                {
+                    MessageBox.Show("Failed to add staff. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error adding staff: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void stfdelete_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (dataGridView1.SelectedRows.Count == 0)
+                {
+                    MessageBox.Show("Please select a staff member to delete.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                var result = MessageBox.Show("Are you sure you want to delete this staff member?", "Confirm Delete",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    int staffId = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["StaffID"].Value);
+
+                    if (_staffRepository.DeleteStaff(staffId))
+                    {
+                        MessageBox.Show("Staff deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        LoadAllStaff();
+                        ClearFormFields();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to delete staff. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error deleting staff: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void stfmodify_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // Check if a staff is selected
+                if (dataGridView1.SelectedRows.Count == 0)
+                {
+                    MessageBox.Show("Please select a staff member to modify.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Validate input
+                if (string.IsNullOrWhiteSpace(stfnamebtn.Text))
+                {
+                    MessageBox.Show("Please enter staff name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    stfnamebtn.Focus();
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(stfphonebtn.Text))
+                {
+                    MessageBox.Show("Please enter phone number.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    stfphonebtn.Focus();
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(stfaddressbtn.Text))
+                {
+                    MessageBox.Show("Please enter address.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    stfaddressbtn.Focus();
+                    return;
+                }
+
+                int staffId = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells["StaffID"].Value);
+
+                // Validate phone number format
+                if (!IsValidPhoneNumber(stfphonebtn.Text.Trim()))
+                {
+                    MessageBox.Show("Please enter a valid phone number.", "Validation Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    stfphonebtn.Focus();
+                    return;
+                }
+
+                // Check if phone number already exists (excluding current staff)
+                if (_staffRepository.IsPhoneNumberExists(stfphonebtn.Text.Trim(), staffId))
+                {
+                    MessageBox.Show("This phone number is already registered to another staff member.", "Duplicate Phone Number",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    stfphonebtn.Focus();
+                    return;
+                }
+
+                // Create updated staff
+                var staff = new HMS.Models.Staff
+                {
+                    StaffID = staffId,
+                    StaffName = stfnamebtn.Text.Trim(),
+                    PhoneNo = stfphonebtn.Text.Trim(),
+                    Address = stfaddressbtn.Text.Trim()
+                };
+
+                if (_staffRepository.UpdateStaff(staff))
+                {
+                    MessageBox.Show("Staff updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadAllStaff();
+                    ClearFormFields();
+                }
+                else
+                {
+                    MessageBox.Show("Failed to update staff. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating staff: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void staffsearch_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string searchTerm = staffserachbar.Text.Trim();
+
+                if (string.IsNullOrEmpty(searchTerm))
+                {
+                    LoadAllStaff(); // Show all if search is empty
+                    return;
+                }
+
+                var staffList = _staffRepository.SearchStaff(searchTerm);
+
+                var displayData = staffList.Select(s => new
+                {
+                    StaffID = s.StaffID,
+                    StaffName = s.StaffName,
+                    PhoneNo = s.PhoneNo,
+                    Address = s.Address,
+                    CreatedDate = s.CreatedDate
+                }).ToList();
+
+                dataGridView1.DataSource = displayData;
+
+                if (staffList.Count == 0)
+                {
+                    MessageBox.Show($"No staff members found with search term '{searchTerm}'.", "Search Results",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error searching staff: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void stfback_Click(object sender, EventArgs e)
         {
-            // Handle back button click - Navigate to Dashboard
+            // Back button click handler - Navigate to Dashboard
             parentDashboard.Show();
             this.Close();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            // Handle insert button click
-        }
-
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            // Handle data grid view cell click
+            try
+            {
+                if (e.RowIndex >= 0 && dataGridView1.SelectedRows.Count > 0)
+                {
+                    var row = dataGridView1.SelectedRows[0];
+
+                    stfidbtn.Text = row.Cells["StaffID"].Value.ToString();
+                    stfnamebtn.Text = row.Cells["StaffName"].Value.ToString();
+                    stfphonebtn.Text = row.Cells["PhoneNo"].Value.ToString();
+                    stfaddressbtn.Text = row.Cells["Address"].Value.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error selecting staff: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ClearFormFields()
+        {
+            stfidbtn.Clear();
+            stfnamebtn.Clear();
+            stfphonebtn.Clear();
+            stfaddressbtn.Clear();
+        }
+
+        private bool IsValidPhoneNumber(string phoneNumber)
+        {
+            // Basic phone number validation - you can make this more sophisticated
+            if (string.IsNullOrWhiteSpace(phoneNumber))
+                return false;
+
+            // Remove common phone number characters
+            string cleanNumber = phoneNumber.Replace(" ", "").Replace("-", "").Replace("(", "").Replace(")", "").Replace("+", "");
+
+            // Check if it contains only digits and has reasonable length
+            return cleanNumber.All(char.IsDigit) && cleanNumber.Length >= 7 && cleanNumber.Length <= 15;
         }
     }
 }

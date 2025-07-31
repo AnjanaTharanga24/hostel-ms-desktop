@@ -2,6 +2,9 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.Data;
+using System.Linq;
+using HMS.Data;
+using HMS.Models;
 
 namespace HMS.Forms
 {
@@ -25,9 +28,12 @@ namespace HMS.Forms
         private TextBox stnsearchbar;
         private DataGridView stnsearch;
 
+        private StudentRepository _studentRepository;
+
         public Student(Dashboard dashboard)
         {
             parentDashboard = dashboard;
+            _studentRepository = new StudentRepository();
             InitializeComponents();
         }
 
@@ -38,7 +44,7 @@ namespace HMS.Forms
             this.AutoScaleMode = AutoScaleMode.Font;
             this.BackgroundImage = Properties.Resources.img1; // Make sure you have img1 in resources
             this.ClientSize = new Size(1350, 624);
-            this.Text = "Student-info";
+            this.Text = "Student Information - HMS";
             this.Load += studentinfo_Load;
 
             // studentid Label
@@ -78,11 +84,13 @@ namespace HMS.Forms
             dob.Click += label3_Click;
             this.Controls.Add(dob);
 
-            // stnbtn TextBox
+            // stnbtn TextBox (Student ID)
             stnbtn = new TextBox();
             stnbtn.Location = new Point(452, 141);
             stnbtn.Size = new Size(274, 26);
             stnbtn.TabIndex = 4;
+            stnbtn.ReadOnly = true;
+            stnbtn.BackColor = Color.LightGray;
             this.Controls.Add(stnbtn);
 
             // namebtn TextBox
@@ -190,6 +198,7 @@ namespace HMS.Forms
             stnsearchbtn.TabIndex = 36;
             stnsearchbtn.Text = "Search";
             stnsearchbtn.UseVisualStyleBackColor = true;
+            stnsearchbtn.Click += stnsearchbtn_Click;
             this.Controls.Add(stnsearchbtn);
 
             // stnsearchbar TextBox
@@ -237,12 +246,73 @@ namespace HMS.Forms
             stnsearch.Size = new Size(552, 150);
             stnsearch.TabIndex = 37;
             stnsearch.CellContentClick += stnsearch_CellContentClick;
+            stnsearch.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            stnsearch.MultiSelect = false;
+            stnsearch.ReadOnly = true;
             this.Controls.Add(stnsearch);
         }
 
         private void studentinfo_Load(object sender, EventArgs e)
         {
-            // Form load event handler
+            try
+            {
+                // Test database connection
+                if (!_studentRepository.TestConnection())
+                {
+                    MessageBox.Show("Unable to connect to database. Please check your connection settings.",
+                        "Database Connection Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Load all students
+                LoadAllStudents();
+
+                // Clear form fields
+                ClearFormFields();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading form: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void LoadAllStudents()
+        {
+            try
+            {
+                var students = _studentRepository.GetAllStudents();
+
+                var displayData = students.Select(s => new
+                {
+                    StudentID = s.StudentID,
+                    StudentName = s.StudentName,
+                    DateOfBirth = s.DateOfBirth,
+                    RoomNo = s.RoomNo,
+                    CreatedDate = s.CreatedDate
+                }).ToList();
+
+                stnsearch.DataSource = displayData;
+
+                // Format columns
+                if (stnsearch.Columns.Count > 0)
+                {
+                    stnsearch.Columns["StudentID"].HeaderText = "Student ID";
+                    stnsearch.Columns["StudentName"].HeaderText = "Student Name";
+                    stnsearch.Columns["DateOfBirth"].HeaderText = "Date of Birth";
+                    stnsearch.Columns["RoomNo"].HeaderText = "Room No.";
+                    stnsearch.Columns["CreatedDate"].HeaderText = "Created Date";
+
+                    stnsearch.Columns["DateOfBirth"].DefaultCellStyle.Format = "dd/MM/yyyy";
+                    stnsearch.Columns["CreatedDate"].DefaultCellStyle.Format = "dd/MM/yyyy HH:mm";
+
+                    // Auto-resize columns
+                    stnsearch.AutoResizeColumns();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error loading students: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void label3_Click(object sender, EventArgs e)
@@ -252,17 +322,173 @@ namespace HMS.Forms
 
         private void stninsert_Click(object sender, EventArgs e)
         {
-            // Insert button click handler
+            try
+            {
+                // Validate input
+                if (string.IsNullOrWhiteSpace(namebtn.Text))
+                {
+                    MessageBox.Show("Please enter student name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    namebtn.Focus();
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(roombtn.Text))
+                {
+                    MessageBox.Show("Please enter room number.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    roombtn.Focus();
+                    return;
+                }
+
+                // Create new student
+                var student = new HMS.Models.Student
+                {
+                    StudentName = namebtn.Text.Trim(),
+                    DateOfBirth = dobbtn.Value.Date,
+                    RoomNo = roombtn.Text.Trim(),
+                    CreatedDate = DateTime.Now
+                };
+
+                if (_studentRepository.InsertStudent(student))
+                {
+                    MessageBox.Show("Student added successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadAllStudents();
+                    ClearFormFields();
+                }
+                else
+                {
+                    MessageBox.Show("Failed to add student. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error adding student: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void stndelete_Click(object sender, EventArgs e)
         {
-            // Delete button click handler
+            try
+            {
+                if (stnsearch.SelectedRows.Count == 0)
+                {
+                    MessageBox.Show("Please select a student to delete.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                var result = MessageBox.Show("Are you sure you want to delete this student?", "Confirm Delete",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    int studentId = Convert.ToInt32(stnsearch.SelectedRows[0].Cells["StudentID"].Value);
+
+                    if (_studentRepository.DeleteStudent(studentId))
+                    {
+                        MessageBox.Show("Student deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        LoadAllStudents();
+                        ClearFormFields();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to delete student. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error deleting student: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void stnmodify_Click(object sender, EventArgs e)
         {
-            // Modify button click handler
+            try
+            {
+                // Check if a student is selected
+                if (stnsearch.SelectedRows.Count == 0)
+                {
+                    MessageBox.Show("Please select a student to modify.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                // Validate input
+                if (string.IsNullOrWhiteSpace(namebtn.Text))
+                {
+                    MessageBox.Show("Please enter student name.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    namebtn.Focus();
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(roombtn.Text))
+                {
+                    MessageBox.Show("Please enter room number.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    roombtn.Focus();
+                    return;
+                }
+
+                int studentId = Convert.ToInt32(stnsearch.SelectedRows[0].Cells["StudentID"].Value);
+
+                // Create updated student
+                var student = new HMS.Models.Student
+                {
+                    StudentID = studentId,
+                    StudentName = namebtn.Text.Trim(),
+                    DateOfBirth = dobbtn.Value.Date,
+                    RoomNo = roombtn.Text.Trim()
+                };
+
+                if (_studentRepository.UpdateStudent(student))
+                {
+                    MessageBox.Show("Student updated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LoadAllStudents();
+                    ClearFormFields();
+                }
+                else
+                {
+                    MessageBox.Show("Failed to update student. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating student: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void stnsearchbtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string searchTerm = stnsearchbar.Text.Trim();
+
+                if (string.IsNullOrEmpty(searchTerm))
+                {
+                    LoadAllStudents(); // Show all if search is empty
+                    return;
+                }
+
+                var students = _studentRepository.SearchStudents(searchTerm);
+
+                var displayData = students.Select(s => new
+                {
+                    StudentID = s.StudentID,
+                    StudentName = s.StudentName,
+                    DateOfBirth = s.DateOfBirth,
+                    RoomNo = s.RoomNo,
+                    CreatedDate = s.CreatedDate
+                }).ToList();
+
+                stnsearch.DataSource = displayData;
+
+                if (students.Count == 0)
+                {
+                    MessageBox.Show($"No students found with search term '{searchTerm}'.", "Search Results",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error searching students: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void stnback_Click_1(object sender, EventArgs e)
@@ -274,7 +500,30 @@ namespace HMS.Forms
 
         private void stnsearch_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            // DataGridView cell click handler
+            try
+            {
+                if (e.RowIndex >= 0 && stnsearch.SelectedRows.Count > 0)
+                {
+                    var row = stnsearch.SelectedRows[0];
+
+                    stnbtn.Text = row.Cells["StudentID"].Value.ToString();
+                    namebtn.Text = row.Cells["StudentName"].Value.ToString();
+                    dobbtn.Value = Convert.ToDateTime(row.Cells["DateOfBirth"].Value);
+                    roombtn.Text = row.Cells["RoomNo"].Value.ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error selecting student: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ClearFormFields()
+        {
+            stnbtn.Clear();
+            namebtn.Clear();
+            dobbtn.Value = DateTime.Now;
+            roombtn.Clear();
         }
     }
 }

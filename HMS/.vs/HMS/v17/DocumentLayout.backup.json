@@ -3,27 +3,59 @@
   "WorkspaceRootPath": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|d:\\projects\\esoft\\hostel\\hostel-ms-desktop\\hms\\hms\\forms\\dashboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|solutionrelative:hms\\forms\\dashboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|d:\\projects\\esoft\\hostel\\hostel-ms-desktop\\hms\\hms\\forms\\guest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|solutionrelative:hms\\forms\\guest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|d:\\projects\\esoft\\hostel\\hostel-ms-desktop\\hms\\hms\\forms\\staff.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\hms\\forms\\staff.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|solutionrelative:hms\\forms\\staff.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|d:\\projects\\esoft\\hostel\\hostel-ms-desktop\\hms\\hms\\forms\\student.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|d:\\projects\\esoft\\hostel\\hostel-ms-desktop\\hms\\hms\\models\\staff.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|solutionrelative:hms\\models\\staff.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|d:\\projects\\esoft\\hostel\\hostel-ms-desktop\\hms\\hms\\data\\staffrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|solutionrelative:hms\\data\\staffrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|d:\\projects\\esoft\\hostel\\hostel-ms-desktop\\hms\\hms\\models\\guest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|solutionrelative:hms\\models\\guest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\hms\\forms\\guest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|solutionrelative:hms\\forms\\guest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|d:\\projects\\esoft\\hostel\\hostel-ms-desktop\\hms\\hms\\data\\guestrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|solutionrelative:hms\\data\\guestrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|d:\\projects\\esoft\\hostel\\hostel-ms-desktop\\hms\\hms\\forms\\guest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|solutionrelative:hms\\forms\\guest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\hms\\forms\\student.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|solutionrelative:hms\\forms\\student.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|d:\\projects\\esoft\\hostel\\hostel-ms-desktop\\hms\\hms\\forms\\student.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|solutionrelative:hms\\forms\\student.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|d:\\projects\\esoft\\hostel\\hostel-ms-desktop\\hms\\hms\\data\\studentrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|solutionrelative:hms\\data\\studentrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|d:\\projects\\esoft\\hostel\\hostel-ms-desktop\\hms\\hms\\models\\student.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|solutionrelative:hms\\models\\student.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|d:\\projects\\esoft\\hostel\\hostel-ms-desktop\\hms\\hms\\forms\\dashboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|solutionrelative:hms\\forms\\dashboard.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\hms\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|solutionrelative:hms\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|d:\\projects\\esoft\\hostel\\hostel-ms-desktop\\hms\\hms\\forms\\login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\hms\\forms\\login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B6EF00D8-8E54-4F2B-BCED-9C66DA6A47FF}|HMS\\HMS.csproj|solutionrelative:hms\\forms\\login.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -42,47 +74,81 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 6,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{e5c86464-96be-4d7c-9a8b-abcb3bbf5f92}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Student.cs",
-              "DocumentMoniker": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Forms\\Student.cs",
-              "RelativeDocumentMoniker": "HMS\\Forms\\Student.cs",
-              "ToolTip": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Forms\\Student.cs",
-              "RelativeToolTip": "HMS\\Forms\\Student.cs",
-              "ViewState": "AgIAAAEBAAAAAAAAAAA/wBgBAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-31T06:22:59.008Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Staff.cs",
-              "DocumentMoniker": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Forms\\Staff.cs",
-              "RelativeDocumentMoniker": "HMS\\Forms\\Staff.cs",
-              "ToolTip": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Forms\\Staff.cs",
-              "RelativeToolTip": "HMS\\Forms\\Staff.cs",
-              "ViewState": "AgIAAMkAAAAAAAAAAAAwwOAAAAAAAAAAAAAAAA==",
+              "Title": "StaffRepository.cs",
+              "DocumentMoniker": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Data\\StaffRepository.cs",
+              "RelativeDocumentMoniker": "HMS\\Data\\StaffRepository.cs",
+              "ToolTip": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Data\\StaffRepository.cs",
+              "RelativeToolTip": "HMS\\Data\\StaffRepository.cs",
+              "ViewState": "AgIAAMAAAAAAAAAAAAAkwNoAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-31T06:22:47.03Z",
+              "WhenOpened": "2025-07-31T07:43:16.06Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "Staff.cs",
+              "DocumentMoniker": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Models\\Staff.cs",
+              "RelativeDocumentMoniker": "HMS\\Models\\Staff.cs",
+              "ToolTip": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Models\\Staff.cs",
+              "RelativeToolTip": "HMS\\Models\\Staff.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAuwAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T07:42:32.333Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Guest.cs [Design]",
+              "DocumentMoniker": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Forms\\Guest.cs",
+              "RelativeDocumentMoniker": "HMS\\Forms\\Guest.cs",
+              "ToolTip": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Forms\\Guest.cs [Design]",
+              "RelativeToolTip": "HMS\\Forms\\Guest.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T07:39:39.488Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "GuestRepository.cs",
+              "DocumentMoniker": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Data\\GuestRepository.cs",
+              "RelativeDocumentMoniker": "HMS\\Data\\GuestRepository.cs",
+              "ToolTip": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Data\\GuestRepository.cs",
+              "RelativeToolTip": "HMS\\Data\\GuestRepository.cs",
+              "ViewState": "AgIAAM8AAAAAAAAAAAAAANoAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T07:39:09.854Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Guest.cs",
+              "DocumentMoniker": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Models\\Guest.cs",
+              "RelativeDocumentMoniker": "HMS\\Models\\Guest.cs",
+              "ToolTip": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Models\\Guest.cs",
+              "RelativeToolTip": "HMS\\Models\\Guest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T07:38:37.449Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "Guest.cs",
               "DocumentMoniker": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Forms\\Guest.cs",
               "RelativeDocumentMoniker": "HMS\\Forms\\Guest.cs",
               "ToolTip": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Forms\\Guest.cs",
               "RelativeToolTip": "HMS\\Forms\\Guest.cs",
-              "ViewState": "AgIAAMgAAAAAAAAAAAAwwN8AAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAB0CAAAAAAAAAAAAACgCAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-07-31T06:22:34.878Z",
               "EditorCaption": ""
@@ -90,6 +156,70 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Staff.cs",
+              "DocumentMoniker": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Forms\\Staff.cs",
+              "RelativeDocumentMoniker": "HMS\\Forms\\Staff.cs",
+              "ToolTip": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Forms\\Staff.cs",
+              "RelativeToolTip": "HMS\\Forms\\Staff.cs",
+              "ViewState": "AgIAAAwCAAAAAAAAAAAowCcCAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T06:22:47.03Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "StudentRepository.cs",
+              "DocumentMoniker": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Data\\StudentRepository.cs",
+              "RelativeDocumentMoniker": "HMS\\Data\\StudentRepository.cs",
+              "ToolTip": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Data\\StudentRepository.cs",
+              "RelativeToolTip": "HMS\\Data\\StudentRepository.cs",
+              "ViewState": "AgIAAKoAAAAAAAAAAAAcwL8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T07:32:51.691Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Student.cs",
+              "DocumentMoniker": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Models\\Student.cs",
+              "RelativeDocumentMoniker": "HMS\\Models\\Student.cs",
+              "ToolTip": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Models\\Student.cs",
+              "RelativeToolTip": "HMS\\Models\\Student.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T07:32:11.494Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Student.cs [Design]",
+              "DocumentMoniker": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Forms\\Student.cs",
+              "RelativeDocumentMoniker": "HMS\\Forms\\Student.cs",
+              "ToolTip": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Forms\\Student.cs [Design]",
+              "RelativeToolTip": "HMS\\Forms\\Student.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T07:33:23.108Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Student.cs",
+              "DocumentMoniker": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Forms\\Student.cs",
+              "RelativeDocumentMoniker": "HMS\\Forms\\Student.cs",
+              "ToolTip": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Forms\\Student.cs",
+              "RelativeToolTip": "HMS\\Forms\\Student.cs",
+              "ViewState": "AgIAAPsBAAAAAAAAAAAcwBACAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-07-31T06:22:59.008Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
               "Title": "Dashboard.cs",
               "DocumentMoniker": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Forms\\Dashboard.cs",
               "RelativeDocumentMoniker": "HMS\\Forms\\Dashboard.cs",
@@ -102,19 +232,18 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 14,
               "Title": "Resources.resx",
               "DocumentMoniker": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Properties\\Resources.resx",
               "RelativeDocumentMoniker": "HMS\\Properties\\Resources.resx",
               "ToolTip": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Properties\\Resources.resx",
               "RelativeToolTip": "HMS\\Properties\\Resources.resx",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
-              "WhenOpened": "2025-07-30T11:49:12.287Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-30T11:49:12.287Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 12,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Program.cs",
               "RelativeDocumentMoniker": "HMS\\Program.cs",
@@ -122,12 +251,11 @@
               "RelativeToolTip": "HMS\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-30T11:42:44.808Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-30T11:42:44.808Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 13,
               "Title": "Login.cs",
               "DocumentMoniker": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Forms\\Login.cs",
               "RelativeDocumentMoniker": "HMS\\Forms\\Login.cs",
@@ -135,12 +263,11 @@
               "RelativeToolTip": "HMS\\Forms\\Login.cs",
               "ViewState": "AgIAAJsAAAAAAAAAAAAiwMIAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-07-30T11:41:07.999Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-07-30T11:41:07.999Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 15,
               "Title": "Form1.cs [Design]",
               "DocumentMoniker": "D:\\projects\\esoft\\hostel\\hostel-ms-desktop\\HMS\\HMS\\Form1.cs",
               "RelativeDocumentMoniker": "HMS\\Form1.cs",
